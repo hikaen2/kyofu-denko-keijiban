@@ -1,0 +1,36 @@
+GCC      = D:\PROGRA~1\BestTech\GCCDEV~1\GCC\H8\bin\h8300-coff-gcc
+OBJCPY   = D:\PROGRA~1\BestTech\GCCDEV~1\GCC\H8\bin\h8300-coff-objcopy
+LDSCRIPT = h8rom.x
+TARGET   = main
+MAP      = main.map
+
+CFLAGS   = -mh -Wall -O2
+LDFLAGS  = -mh -mrelax -nostartfiles -Wl,--script=$(LDSCRIPT) -Wl,-Map,$(MAP) -Wl,-static
+
+
+main.mot : main.exe
+	$(OBJCPY) -O srec main.exe main.mot
+main.exe : main.o timer.o sci.o shell.o command.o bmp.o h8crt0.o
+	$(GCC) -o main.exe main.o timer.o sci.o shell.o command.o bmp.o h8crt0.o $(LDFLAGS)
+
+main.o : main.c
+	$(GCC) $(CFLAGS) -c main.c
+timer.o : timer.c timer.h public.h
+	$(GCC) $(CFLAGS) -c timer.c
+sci.o : sci.c sci.h sci_printf.c public.h
+	$(GCC) $(CFLAGS) -c sci.c
+shell.o : shell.c shell.h command_def.h public.h
+	$(GCC) $(CFLAGS) -c shell.c
+command.o : command.c command.h command_def.h public.h
+	$(GCC) $(CFLAGS) -c command.c
+bmp.o : bmp.c bmp.h bmp_def.h sci.h public.h
+	$(GCC) $(CFLAGS) -c bmp.c
+h8crt0.o : h8crt0.s
+	$(GCC) $(CFLAGS) -c h8crt0.s
+
+
+write:
+	h8write -3048 main.mot com1
+
+clean:
+	del *.o *.mot *.exe *.map

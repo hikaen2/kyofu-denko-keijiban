@@ -1,0 +1,6 @@
+main.o: main.c 3048.h timer.h sci.h bmp.h shell.h public.h
+timer.o: timer.c 3048.h timer.h public.h bmp.h
+sci.o: sci.c 3048.h sci.h sci_printf.c timer.h
+shell.o: shell.c 3048.h command.h command_def.h sci.h
+command.o: command.c 3048.h command.h command_def.h sci.h bmp.h public.h
+bmp.o: bmp.c bmp.h sci.h public.h bmp_def.h
