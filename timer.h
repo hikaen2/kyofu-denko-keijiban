@@ -4,14 +4,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 /* timer.h */
 
-void          timer_init(void);					// ‘Ò‚¿ŠÔ”­¶‰Šú‰»
-void          wait(int msec);					// ‘Ò‚¿ŠÔ”­¶  ˆø”‚ÉA•K—v‚Èƒ~ƒŠ•b‚ğw’è‚·‚é
+void          timer_init(void);					// å¾…ã¡æ™‚é–“ç™ºç”ŸåˆæœŸåŒ–
+void          wait(int msec);					// å¾…ã¡æ™‚é–“ç™ºç”Ÿ  å¼•æ•°ã«ã€å¿…è¦ãªãƒŸãƒªç§’ã‚’æŒ‡å®šã™ã‚‹
 
-unsigned int  timer1_count;						// ƒ^ƒCƒ}[1‚ÌƒJƒEƒ“ƒ^
-void          timer1_init(int interval);		// ƒCƒ“ƒ^[ƒoƒ‹ƒ^ƒCƒ}[1‚ğ‰Šú‰»
-void          timer1_interval(int interval);	// ƒCƒ“ƒ^[ƒoƒ‹‚ğ•ÏX
-void          timer1_start(void);				// ƒ^ƒCƒ}[1‚ğŠJn
-void          timer1_stop(void);				// ƒ^ƒCƒ}[1‚ğ’â~
+unsigned int  timer1_count;						// ã‚¿ã‚¤ãƒãƒ¼1ã®ã‚«ã‚¦ãƒ³ã‚¿
+void          timer1_init(int interval);		// ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã‚¿ã‚¤ãƒãƒ¼1ã‚’åˆæœŸåŒ–
+void          timer1_interval(int interval);	// ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã‚’å¤‰æ›´
+void          timer1_start(void);				// ã‚¿ã‚¤ãƒãƒ¼1ã‚’é–‹å§‹
+void          timer1_stop(void);				// ã‚¿ã‚¤ãƒãƒ¼1ã‚’åœæ­¢
 
 ///////////////////////////////////////////////////////////////////////////////
 #endif

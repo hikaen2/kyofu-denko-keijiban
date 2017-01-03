@@ -4,17 +4,17 @@
 ///////////////////////////////////////////////////////////////////////////////
 /* bmp.h */
 
-typedef struct {										// reArrayed Bitmap •À‚Ñ‘Ö‚¦DIB!?
+typedef struct {										// reArrayed Bitmap ä¸¦ã³æ›¿ãˆDIB!?
 	long				x, y;
 	unsigned long		size;
 	unsigned char*		data;
 } ABMP;
 
-void initABMP(ABMP* abmp);								// ABMP‚ğ‰Šú‰»‚·‚é
-int  readABMP(ABMP* abmp);								// ABMP‚ğSCI1‚©‚ç“Ç‚Ş
-void dumpABMP(const ABMP* abmp);						// ABMP‚ğƒ_ƒ“ƒv
-int  getpointABMP(const ABMP* abmp, int x, int y);		// ABMP‚ÌÀ•W(x,y)‚Ì’l‚ğ•Ô‚·
-void letpointABMP(ABMP* abmp, int x, int y, char bit);	// ABMP‚ÌÀ•W(x,y)‚Ébit‚ğŠi”[‚·‚é
+void initABMP(ABMP* abmp);								// ABMPã‚’åˆæœŸåŒ–ã™ã‚‹
+int  readABMP(ABMP* abmp);								// ABMPã‚’SCI1ã‹ã‚‰èª­ã‚€
+void dumpABMP(const ABMP* abmp);						// ABMPã‚’ãƒ€ãƒ³ãƒ—
+int  getpointABMP(const ABMP* abmp, int x, int y);		// ABMPã®åº§æ¨™(x,y)ã®å€¤ã‚’è¿”ã™
+void letpointABMP(ABMP* abmp, int x, int y, char bit);	// ABMPã®åº§æ¨™(x,y)ã«bitã‚’æ ¼ç´ã™ã‚‹
 void printlineABMP(const ABMP* abmp, unsigned int line, unsigned char* upper, unsigned char* lower);
 
 ///////////////////////////////////////////////////////////////////////////////

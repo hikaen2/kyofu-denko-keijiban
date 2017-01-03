@@ -9,37 +9,37 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 void timer_init(void){
-	ITU0.TCR.BYTE     =   0x23;					// GRAƒRƒ“ƒyƒAƒ}ƒbƒ` clock 1/8 = 2MHz
-	ITU0.GRA          = 0x07d0;					// GRA‚ð2000‚ÉÝ’è = 1ms
-	ITU.TSTR.BIT.STR0 =      0;					// ƒJƒEƒ“ƒg’âŽ~ó‘Ô
+	ITU0.TCR.BYTE     =   0x23;					// GRAã‚³ãƒ³ãƒšã‚¢ãƒžãƒƒãƒ clock 1/8 = 2MHz
+	ITU0.GRA          = 0x07d0;					// GRAã‚’2000ã«è¨­å®š = 1ms
+	ITU.TSTR.BIT.STR0 =      0;					// ã‚«ã‚¦ãƒ³ãƒˆåœæ­¢çŠ¶æ…‹
 	return;
 }
 void wait(int msec){
 	int i;
-	ITU.TSTR.BIT.STR0 = 1;						// ITU0 TCNTƒJƒEƒ“ƒgŠJŽn
+	ITU.TSTR.BIT.STR0 = 1;						// ITU0 TCNTã‚«ã‚¦ãƒ³ãƒˆé–‹å§‹
 	for(i=0; i<msec; i++){
-		do{ }while(ITU0.TSR.BIT.IMFA == 0);		// TCNT = GRA‚É‚È‚é‚Ü‚Å‘Ò‚Â(1ms)
-		ITU0.TSR.BIT.IMFA = 0;					// ŒŸ’mƒtƒ‰ƒO‚ð–ß‚µ‚ÄÄŠJ
+		do{ }while(ITU0.TSR.BIT.IMFA == 0);		// TCNT = GRAã«ãªã‚‹ã¾ã§å¾…ã¤(1ms)
+		ITU0.TSR.BIT.IMFA = 0;					// æ¤œçŸ¥ãƒ•ãƒ©ã‚°ã‚’æˆ»ã—ã¦å†é–‹
 	}
-	ITU.TSTR.BIT.STR0 = 0;						// ITU0 TCNTƒJƒEƒ“ƒgI—¹
+	ITU.TSTR.BIT.STR0 = 0;						// ITU0 TCNTã‚«ã‚¦ãƒ³ãƒˆçµ‚äº†
 	return;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// timer1 (ƒCƒ“ƒ^[ƒoƒ‹ƒ^ƒCƒ}[)
-void timer1_init(int interval){					// ƒCƒ“ƒ^[ƒoƒ‹ƒ^ƒCƒ}[1‚ð‰Šú‰»
+// timer1 (ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã‚¿ã‚¤ãƒžãƒ¼)
+void timer1_init(int interval){					// ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã‚¿ã‚¤ãƒžãƒ¼1ã‚’åˆæœŸåŒ–
 	timer1_count      = MAX_WIDTH/2;
-	ITU1.TCR.BYTE     = 0x23;					// GRAƒRƒ“ƒyƒAƒ}ƒbƒ` clock 1/8 = 2MHz
-	ITU1.GRA          = interval;				// GRA‚ðinterval‚ÉÝ’è
-	ITU1.TIER.BYTE    = 0xF9;					// ITU1‚ÌGRA‚É‚æ‚éƒRƒ“ƒyƒAƒ}ƒbƒ`Š„ž‚Ý‚ð‹–‰Â
-	ITU.TSTR.BIT.STR1 = 0;						// ƒJƒEƒ“ƒg’âŽ~ó‘Ô
+	ITU1.TCR.BYTE     = 0x23;					// GRAã‚³ãƒ³ãƒšã‚¢ãƒžãƒƒãƒ clock 1/8 = 2MHz
+	ITU1.GRA          = interval;				// GRAã‚’intervalã«è¨­å®š
+	ITU1.TIER.BYTE    = 0xF9;					// ITU1ã®GRAã«ã‚ˆã‚‹ã‚³ãƒ³ãƒšã‚¢ãƒžãƒƒãƒå‰²è¾¼ã¿ã‚’è¨±å¯
+	ITU.TSTR.BIT.STR1 = 0;						// ã‚«ã‚¦ãƒ³ãƒˆåœæ­¢çŠ¶æ…‹
 }
-void timer1_interval(int interval){				// ƒ^ƒCƒ}[1‚ÌƒCƒ“ƒ^[ƒoƒ‹‚ðÝ’è
+void timer1_interval(int interval){				// ã‚¿ã‚¤ãƒžãƒ¼1ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã‚’è¨­å®š
 	ITU1.GRA = interval;
 }
-void timer1_start(void){						// ƒ^ƒCƒ}[1‚ðŠJŽn
+void timer1_start(void){						// ã‚¿ã‚¤ãƒžãƒ¼1ã‚’é–‹å§‹
 	ITU1.TCNT         = 0;
-	ITU.TSTR.BIT.STR1 = 1;						// ITU1 TCNTƒJƒEƒ“ƒgŠJŽn
+	ITU.TSTR.BIT.STR1 = 1;						// ITU1 TCNTã‚«ã‚¦ãƒ³ãƒˆé–‹å§‹
 
 	if(FLG_autosync){							// Interval Calibration
 		ITU1.GRA = (unsigned int) ((float)ITU1.GRA * ((float)timer1_count/(MAX_WIDTH/2+1)) +0.5);
@@ -48,15 +48,15 @@ void timer1_start(void){						// ƒ^ƒCƒ}[1‚ðŠJŽn
 	timer1_count = 0;
 	return;
 }
-void timer1_stop(void){							// ƒ^ƒCƒ}[1‚ð’âŽ~
-	ITU.TSTR.BIT.STR1 = 0;						// ƒJƒEƒ“ƒg’âŽ~ó‘Ô
+void timer1_stop(void){							// ã‚¿ã‚¤ãƒžãƒ¼1ã‚’åœæ­¢
+	ITU.TSTR.BIT.STR1 = 0;						// ã‚«ã‚¦ãƒ³ãƒˆåœæ­¢çŠ¶æ…‹
 }
-void int_imia1(void)							// ƒ^ƒCƒ}[1ƒCƒ“ƒ^[ƒoƒ‹Š„‚èž‚Ý
+void int_imia1(void)							// ã‚¿ã‚¤ãƒžãƒ¼1ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«å‰²ã‚Šè¾¼ã¿
 {
 	printlineABMP(&Public_Abmp, Public_Count + timer1_count,               LED_Front_Upper, LED_Front_Lower);
 	printlineABMP(&Public_Abmp, Public_Count + timer1_count+(MAX_WIDTH/2), LED_Back_Upper,  LED_Back_Lower);
 	if(timer1_count < 255) timer1_count++;	
-	ITU1.TSR.BIT.IMFA = 0; 						// Š„ž‚ÝŒŸ’mƒtƒ‰ƒO‚ð–ß‚µ‚ÄÄŠJ
+	ITU1.TSR.BIT.IMFA = 0; 						// å‰²è¾¼ã¿æ¤œçŸ¥ãƒ•ãƒ©ã‚°ã‚’æˆ»ã—ã¦å†é–‹
 }
 
 ///////////////////////////////////////////////////////////////////////////////

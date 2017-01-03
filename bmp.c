@@ -9,8 +9,8 @@
 static __inline__ void bset(unsigned char* data, unsigned char nbit) __attribute__ ((always_inline));
 static __inline__ void bclr(unsigned char* data, unsigned char nbit) __attribute__ ((always_inline));
 static __inline__ unsigned char btst(const unsigned char* data, unsigned char nbit) __attribute__ ((always_inline));
-static __inline__ char getbit(const unsigned char* data, int nbit);		// data‚Ìnbit–Ú‚Ìbit‚ğ•Ô‚·
-static __inline__ void letbit(unsigned char* data, int nbit, char bit);	// data‚Ìnbit–Ú‚Ébit‚ğŠi”[
+static __inline__ char getbit(const unsigned char* data, int nbit);		// dataã®nbitç›®ã®bitã‚’è¿”ã™
+static __inline__ void letbit(unsigned char* data, int nbit, char bit);	// dataã®nbitç›®ã«bitã‚’æ ¼ç´
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -36,14 +36,14 @@ __inline__ unsigned char btst(const unsigned char* data, unsigned char nbit)
     return __ccr;
 }
 
-// data‚Ìnbit–Ú‚Ìbit‚ğ•Ô‚·
+// dataã®nbitç›®ã®bitã‚’è¿”ã™
 __inline__ char getbit(const unsigned char* data, int nbit)
 {
 	return btst(&data[nbit/8], 7-(nbit%8));
 }
 
 /*
-// data‚Ìnbit–Ú‚Ìbit‚ğ•Ô‚·
+// dataã®nbitç›®ã®bitã‚’è¿”ã™
 __inline__ char getbit(const unsigned char* data, int nbit)
 {
 	unsigned char mask = 1;
@@ -51,7 +51,7 @@ __inline__ char getbit(const unsigned char* data, int nbit)
 	return (data[nbit/8] & mask)!=0;
 }
 */
-// data‚Ìnbit–Ú‚Ébit‚ğŠi”[
+// dataã®nbitç›®ã«bitã‚’æ ¼ç´
 __inline__ void letbit(unsigned char* data, int nbit, char bit)
 {
 	if(bit) bset(&data[nbit/8], nbit%8);
@@ -60,7 +60,7 @@ __inline__ void letbit(unsigned char* data, int nbit, char bit)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// ABMP‚ğ‰Šú‰»‚·‚é
+// ABMPã‚’åˆæœŸåŒ–ã™ã‚‹
 void initABMP(ABMP* abmp)
 {
 	int i;
@@ -74,7 +74,7 @@ void initABMP(ABMP* abmp)
 	return;
 }
 
-// ABMP‚ÌÀ•W(x,y)‚Ì’l‚ğ•Ô‚· ‘½•ª–¢Š®¬
+// ABMPã®åº§æ¨™(x,y)ã®å€¤ã‚’è¿”ã™ å¤šåˆ†æœªå®Œæˆ
 int getpointABMP(const ABMP* abmp, int x, int y)
 {
 	if(x < 0 || abmp->x <= x) return 0;
@@ -82,7 +82,7 @@ int getpointABMP(const ABMP* abmp, int x, int y)
 	return getbit(abmp->data, x*y+y);
 }
 
-// ABMP‚ÌÀ•W(x,y)‚Ébit‚ğŠi”[‚·‚é
+// ABMPã®åº§æ¨™(x,y)ã«bitã‚’æ ¼ç´ã™ã‚‹
 void letpointABMP(ABMP* abmp, int x, int y, char bit)
 {
 	if(x < 0 || abmp->x <= x) return;
@@ -91,14 +91,14 @@ void letpointABMP(ABMP* abmp, int x, int y, char bit)
 	return;
 }
 
-// ABMP‚ğSCI1‚©‚ç“Ç‚Ş
+// ABMPã‚’SCI1ã‹ã‚‰èª­ã‚€
 int readABMP(ABMP* abmp)
 {
 	long linesize;
 	int x,y,i;
 	unsigned char temp;
 	
-	// ƒwƒbƒ_“Ç‚İ‚İ
+	// ãƒ˜ãƒƒãƒ€èª­ã¿è¾¼ã¿
 		  if( sci1_sreadword()	!= 0x4d42 )		 return 1;	// bmfh.bfType
 			  sci1_sreaddword();							// bmfh.bfSize
 			  sci1_sreadword();								// bmfh.bfReserved1
@@ -130,7 +130,7 @@ int readABMP(ABMP* abmp)
 	return 0;
 }
 
-// ABMP‚ğƒ_ƒ“ƒv‚·‚é
+// ABMPã‚’ãƒ€ãƒ³ãƒ—ã™ã‚‹
 void dumpABMP(const ABMP* abmp)
 {
 	int i;
@@ -145,7 +145,7 @@ void dumpABMP(const ABMP* abmp)
 	return;
 }
 
-// ABMP‚ğLED‚É•\¦‚·‚é
+// ABMPã‚’LEDã«è¡¨ç¤ºã™ã‚‹
 void printlineABMP(const ABMP* abmp, unsigned int line, unsigned char* upper, unsigned char* lower)
 {
 	line = line % MAX_WIDTH;

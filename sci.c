@@ -24,102 +24,102 @@ volatile unsigned char CTRL_C;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// SCI1‚©‚çŠ„‚İ
+// SCI1ã‹ã‚‰å‰²è¾¼ã¿
 void int_rxi1(void)
 {
-	switch(SCI1.SSR.BIT.RDRF){			// óMó‘Ô”»’è
-	case 1:								// RDRF=1 ³íóM
+	switch(SCI1.SSR.BIT.RDRF){			// å—ä¿¡çŠ¶æ…‹åˆ¤å®š
+	case 1:								// RDRF=1 æ­£å¸¸å—ä¿¡
 		if(Qin == Qout && Qenable){
 			sci1_printf("Buffer overflow.\n\n");
 		}else{
-			*Qin = SCI1.RDR;			// data æ‚èo‚µ/
+			*Qin = SCI1.RDR;			// data å–ã‚Šå‡ºã—/
 			if(*Qin == 0x03) CTRL_C = 1;
 			else             CTRL_C = 0;
 			Qin++; if(Qin == Qend) Qin = Qbuf;
 			Qenable = 1;
 		}
-		SCI1.SSR.BIT.RDRF = 0;			// óMƒtƒ‰ƒOƒNƒŠƒA
+		SCI1.SSR.BIT.RDRF = 0;			// å—ä¿¡ãƒ•ãƒ©ã‚°ã‚¯ãƒªã‚¢
 		break;
-	default:							// ƒGƒ‰[”­¶
-		SCI1.SSR.BYTE &= 0xc7;			// ƒGƒ‰[ƒtƒ‰ƒOƒNƒŠƒA
+	default:							// ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿæ™‚
+		SCI1.SSR.BYTE &= 0xc7;			// ã‚¨ãƒ©ãƒ¼ãƒ•ãƒ©ã‚°ã‚¯ãƒªã‚¢
 		break;
 	}
 	return;
 }
 
-// SCI1‰Šú‰»
+// SCI1åˆæœŸåŒ–
 void sci1_init(void)
 {
-	SCI1.SCR.BYTE = 0x00;				// SCI1İ’è stop,“à•”ƒNƒƒbƒN
+	SCI1.SCR.BYTE = 0x00;				// SCI1è¨­å®š stop,å†…éƒ¨ã‚¯ãƒ­ãƒƒã‚¯
 	SCI1.SMR.BYTE = 0x00;				// data8.stop1,pari non
 	//SCI1.BRR = 51;					// 9600bps
 	//SCI1.BRR = 207;					// 2400bps
 	SCI1.BRR = 25;						// 19200bps
 	wait(1);
-	SCI1.SCR.BYTE = 0x30;				// Tx,Rx—LŒø ,Š„‚İ–³Œø
-	SCI1.SSR.BYTE &= 0x80;				// ƒGƒ‰[ƒtƒ‰ƒO‚ÌƒNƒŠƒA
+	SCI1.SCR.BYTE = 0x30;				// Tx,Rxæœ‰åŠ¹ ,å‰²è¾¼ã¿ç„¡åŠ¹
+	SCI1.SSR.BYTE &= 0x80;				// ã‚¨ãƒ©ãƒ¼ãƒ•ãƒ©ã‚°ã®ã‚¯ãƒªã‚¢
 	
 	Qenable = 0;
 	Qin     = Qbuf;
 	Qout    = Qbuf;
 	Qend    = Qbuf + Qsize;
-	SCI1.SCR.BIT.RIE = 1;				// ƒVƒŠƒAƒ‹ƒ|[ƒg‚PŠ„‚İ‹–‰Â
+	SCI1.SCR.BIT.RIE = 1;				// ã‚·ãƒªã‚¢ãƒ«ãƒãƒ¼ãƒˆï¼‘å‰²è¾¼ã¿è¨±å¯
 	
 	return;
 }
 
-// SCI1‚©‚ç‚P•¶šóM
+// SCI1ã‹ã‚‰ï¼‘æ–‡å­—å—ä¿¡
 unsigned char sci1_rx(void)
 {
 	unsigned char data;	
 	
-	while(Qenable == 0);					// óM‚ÆƒGƒ‰[‚Ìƒtƒ‰ƒO‚ª—§‚Â‚Ü‚Å‘Ò‚Â
-	data = *Qout;							// ƒf[ƒ^‚ğó‚¯æ‚èdata‚É•Û‘¶
+	while(Qenable == 0);					// å—ä¿¡ã¨ã‚¨ãƒ©ãƒ¼ã®ãƒ•ãƒ©ã‚°ãŒç«‹ã¤ã¾ã§å¾…ã¤
+	data = *Qout;							// ãƒ‡ãƒ¼ã‚¿ã‚’å—ã‘å–ã‚Šdataã«ä¿å­˜
 	Qout++; if(Qout == Qend) Qout = Qbuf;
 	if(Qout == Qin) Qenable=0;
 	
 	return data;
 }
 
-// SCI1‚É‚P•¶š‘—M
+// SCI1ã«ï¼‘æ–‡å­—é€ä¿¡
 void sci1_tx(char data)
 {
-	while(SCI1.SSR.BIT.TDRE == 0);				// –¢‘—Mƒf[ƒ^‚ª‘—‚ç‚ê‚é‚Ü‚Å‘Ò‚Â
-	SCI1.TDR = data;							// ‘—Mƒf[ƒ^‚ÌƒZƒbƒg
-	SCI1.SSR.BIT.TDRE = 0;						// ‘—Mƒtƒ‰ƒO‚ÌƒNƒŠƒA
+	while(SCI1.SSR.BIT.TDRE == 0);				// æœªé€ä¿¡ãƒ‡ãƒ¼ã‚¿ãŒé€ã‚‰ã‚Œã‚‹ã¾ã§å¾…ã¤
+	SCI1.TDR = data;							// é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
+	SCI1.SSR.BIT.TDRE = 0;						// é€ä¿¡ãƒ•ãƒ©ã‚°ã®ã‚¯ãƒªã‚¢
 	return;
 }
 
-// SCI1‚©‚ç•¶š—ñ‚ğóM
+// SCI1ã‹ã‚‰æ–‡å­—åˆ—ã‚’å—ä¿¡
 void sci1_strtx(const char *str)
 {
-	while(*str != '\0'){						// •¶š‚ª\0‚É‚È‚é‚Ü‚ÅŒJ‚è•Ô‚·
-		sci1_tx(*str);							// 1•¶š‘—M
-		str++;									// Ÿ‚Ì•¶š‚ÉˆÚ‚é
+	while(*str != '\0'){						// æ–‡å­—ãŒ\0ã«ãªã‚‹ã¾ã§ç¹°ã‚Šè¿”ã™
+		sci1_tx(*str);							// 1æ–‡å­—é€ä¿¡
+		str++;									// æ¬¡ã®æ–‡å­—ã«ç§»ã‚‹
 	}
 	return;
 }
 
-// SCI1‚©‚çmaxchar-1•¶š‚Ü‚ÅA‚Ü‚½‚Í•œ‰ü‚Ü‚Å‚Ì•¶š—ñ‚ğ“Ç‚İ‚Ş
+// SCI1ã‹ã‚‰maxchar-1æ–‡å­—ã¾ã§ã€ã¾ãŸã¯å¾©æ”¹ã¾ã§ã®æ–‡å­—åˆ—ã‚’èª­ã¿è¾¼ã‚€
 unsigned char* sci1_strrx(char* str, int maxchar)
 {
 	unsigned char data = '\0';
 	int  i;
-	for(i=0; i<maxchar-1 && data!='\r'; i++){	// ƒŠƒ^[ƒ““ü—Í‚ğŒŸo
-		data = sci1_rx();						// 1•¶šóM
-		if(data != '\r'){						// •œ‰ü•¶š‚Í“Ç‚İ‚Ü‚È‚¢
+	for(i=0; i<maxchar-1 && data!='\r'; i++){	// ãƒªã‚¿ãƒ¼ãƒ³å…¥åŠ›ã‚’æ¤œå‡º
+		data = sci1_rx();						// 1æ–‡å­—å—ä¿¡
+		if(data != '\r'){						// å¾©æ”¹æ–‡å­—ã¯èª­ã¿è¾¼ã¾ãªã„
 			sci1_tx(data);
-			str[i] = data;						// 1•¶š‚ğ•¶š—ñ‚ÉŠi”[
+			str[i] = data;						// 1æ–‡å­—ã‚’æ–‡å­—åˆ—ã«æ ¼ç´
 		}else{
 			i--;
 		}
 	}
-	str[i] = '\0';								// “Ç‚İ‚ñ‚¾•¶š—ñ‚ÌÅŒã‚É'\0'‚ğ•t‰Á‚·‚é
+	str[i] = '\0';								// èª­ã¿è¾¼ã‚“ã æ–‡å­—åˆ—ã®æœ€å¾Œã«'\0'ã‚’ä»˜åŠ ã™ã‚‹
 	sci1_printf("\n");
-	return str;									// –ß’l:ƒ|ƒCƒ“ƒ^str‚»‚Ì‚à‚Ì
+	return str;									// æˆ»å€¤:ãƒã‚¤ãƒ³ã‚¿strãã®ã‚‚ã®
 }
 
-// fread‚Û‚¢
+// freadã½ã„
 unsigned int sci1_sread(void* buf, unsigned int size, unsigned int n)
 {
 	char* cbuf = (char*)buf;
@@ -130,7 +130,7 @@ unsigned int sci1_sread(void* buf, unsigned int size, unsigned int n)
 	return i;
 }
 
-// DWORD‚ğSCI1‚©‚ç“Ç
+// DWORDã‚’SCI1ã‹ã‚‰èª­è¾¼
 unsigned short sci1_sreadword(void)
 {
 	unsigned short var;
@@ -139,7 +139,7 @@ unsigned short sci1_sreadword(void)
 	return var;
 }
 
-// WORD‚ğSCI1‚©‚ç“Ç
+// WORDã‚’SCI1ã‹ã‚‰èª­è¾¼
 unsigned long sci1_sreaddword(void)
 {
 	unsigned long var;

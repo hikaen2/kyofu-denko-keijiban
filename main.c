@@ -1,5 +1,5 @@
 /********************************************/
-/* ‹°•|“dŒõŒf¦”Â2               2003/09/28 */
+/* ææ€–é›»å…‰æ²ç¤ºæ¿2               2003/09/28 */
 /*                              Suzuki Taro */
 /*                                 H8-3048F */
 /********************************************/
@@ -15,16 +15,16 @@ const char VersionString[] = {"Kyofu Denko Keijiban Version 2.0 Beta 4 Release 1
 #include "public.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-// “üo—Íƒ|[ƒg‰Šú‰»
+// å…¥å‡ºåŠ›ãƒãƒ¼ãƒˆåˆæœŸåŒ–
 void io_init(void)
 {
-	P1.DDR = 0xff;						// Port1 o—Í Œf¦”ÂLED
-	P2.DDR = 0xff; P2.PCR.BYTE = 0x00;	// Port2 o—Í Œf¦”ÂLED   ƒvƒ‹ƒAƒbƒvoff
-	PA.DDR = 0xff;						// PortA o—Í Œf¦”ÂLED
-	PB.DDR = 0xff;						// PortB o—Í Œf¦”ÂLED
-	P4.DDR = 0x00; P4.PCR.BYTE = 0xff;	// Port4 “ü—Í ‘€ì—psw1-4 ƒvƒ‹ƒAƒbƒvon
-	P5.DDR = 0xff; P5.PCR.BYTE = 0x00;	// Port5 o—Í •\¦LED     ƒvƒ‹ƒAƒbƒvoff
-	P8.DDR = 0x00;						// Port8 “ü—Í IRQ2,3
+	P1.DDR = 0xff;						// Port1 å‡ºåŠ› æ²ç¤ºæ¿LED
+	P2.DDR = 0xff; P2.PCR.BYTE = 0x00;	// Port2 å‡ºåŠ› æ²ç¤ºæ¿LED   ãƒ—ãƒ«ã‚¢ãƒƒãƒ—off
+	PA.DDR = 0xff;						// PortA å‡ºåŠ› æ²ç¤ºæ¿LED
+	PB.DDR = 0xff;						// PortB å‡ºåŠ› æ²ç¤ºæ¿LED
+	P4.DDR = 0x00; P4.PCR.BYTE = 0xff;	// Port4 å…¥åŠ› æ“ä½œç”¨sw1-4 ãƒ—ãƒ«ã‚¢ãƒƒãƒ—on
+	P5.DDR = 0xff; P5.PCR.BYTE = 0x00;	// Port5 å‡ºåŠ› è¡¨ç¤ºLED     ãƒ—ãƒ«ã‚¢ãƒƒãƒ—off
+	P8.DDR = 0x00;						// Port8 å…¥åŠ› IRQ2,3
 	
 	LED_Front_Upper = (unsigned char*)&P1.DR.BYTE;
 	LED_Front_Lower = (unsigned char*)&P2.DR.BYTE;
@@ -33,7 +33,7 @@ void io_init(void)
 	return;
 }
 
-// Power On Self Test, ƒ|[ƒg1,2,A,B‚ÌLED‚ğŒõ‚ç‚¹‚é‚¾‚¯
+// Power On Self Test, ãƒãƒ¼ãƒˆ1,2,A,Bã®LEDã‚’å…‰ã‚‰ã›ã‚‹ã ã‘
 void post(void)
 {
 	unsigned char i, j;
@@ -68,7 +68,7 @@ void irq_init(void)
 	return;
 }
 
-// ƒA[ƒ€‚ÌƒtƒHƒgƒCƒ“ƒ^ƒ‰ƒvƒ^‚©‚ç‚ÌŠ„‚è‚İ
+// ã‚¢ãƒ¼ãƒ ã®ãƒ•ã‚©ãƒˆã‚¤ãƒ³ã‚¿ãƒ©ãƒ—ã‚¿ã‹ã‚‰ã®å‰²ã‚Šè¾¼ã¿
 void int_irq2(void)
 {
 	LED_Front_Upper = (unsigned char*)&P1.DR.BYTE;
@@ -77,14 +77,14 @@ void int_irq2(void)
 	LED_Back_Lower  = (unsigned char*)&PB.DR.BYTE;
 	Public_Count += Public_Scroll_Value;
 	if(Public_Count <  0)         Public_Count= MAX_WIDTH-1;
-	if(Public_Count >= MAX_WIDTH) Public_Count=0;	// ƒXƒNƒ[ƒ‹—Ê
+	if(Public_Count >= MAX_WIDTH) Public_Count=0;	// ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«é‡
 	
-	timer1_start();	// ƒCƒ“ƒ^[ƒoƒ‹ƒ^ƒCƒ}[‚ğ‹N“®
+	timer1_start();	// ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã‚¿ã‚¤ãƒãƒ¼ã‚’èµ·å‹•
 	
 	return;
 }
 
-// ƒA[ƒ€‚ÌƒtƒHƒgƒCƒ“ƒ^ƒ‰ƒvƒ^‚©‚ç‚ÌŠ„‚è‚İ
+// ã‚¢ãƒ¼ãƒ ã®ãƒ•ã‚©ãƒˆã‚¤ãƒ³ã‚¿ãƒ©ãƒ—ã‚¿ã‹ã‚‰ã®å‰²ã‚Šè¾¼ã¿
 void int_irq3(void)
 {
 	LED_Front_Upper = (unsigned char*)&PA.DR.BYTE;
@@ -93,31 +93,31 @@ void int_irq3(void)
 	LED_Back_Lower  = (unsigned char*)&P2.DR.BYTE;
 	Public_Count += Public_Scroll_Value;
 	if(Public_Count <  0)         Public_Count= MAX_WIDTH-1;
-	if(Public_Count >= MAX_WIDTH) Public_Count=0;	// ƒXƒNƒ[ƒ‹—Ê
+	if(Public_Count >= MAX_WIDTH) Public_Count=0;	// ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«é‡
 	
-	timer1_start();	// ƒCƒ“ƒ^[ƒoƒ‹ƒ^ƒCƒ}[‚ğ‹N“®
+	timer1_start();	// ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã‚¿ã‚¤ãƒãƒ¼ã‚’èµ·å‹•
 	
 	return;
 }
 
-// ƒƒCƒ“
+// ãƒ¡ã‚¤ãƒ³
 int main(void)
 {
 	char command_line[40];
-	asm("andc.b #0x3f,ccr");			// Š„‚è‚İ‚ğ—LŒø
+	asm("andc.b #0x3f,ccr");			// å‰²ã‚Šè¾¼ã¿ã‚’æœ‰åŠ¹
 	initABMP(&Public_Abmp);
 	Public_Count = 0;
     FLG_autosync = 1;
     Public_Scroll_Value = 1;
     
-	io_init();							// “üo—Íƒ|[ƒg‰Šú‰»
-	timer_init();						// ƒ^ƒCƒ}[‰Šú‰»
-	sci1_init();						// ƒVƒŠƒAƒ‹ƒRƒ“ƒgƒ[ƒ‰‰Šú‰»
-	sci1_printf("\n%s\n", VersionString);	// ƒo[ƒWƒ‡ƒ“•\¦
+	io_init();							// å…¥å‡ºåŠ›ãƒãƒ¼ãƒˆåˆæœŸåŒ–
+	timer_init();						// ã‚¿ã‚¤ãƒãƒ¼åˆæœŸåŒ–
+	sci1_init();						// ã‚·ãƒªã‚¢ãƒ«ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©åˆæœŸåŒ–
+	sci1_printf("\n%s\n", VersionString);	// ãƒãƒ¼ã‚¸ãƒ§ãƒ³è¡¨ç¤º
 	post();								// Power-On Self-Test
-	//timer1_init(584);					// ƒ^ƒCƒ}[1‰Šú‰»(interval)
+	//timer1_init(584);					// ã‚¿ã‚¤ãƒãƒ¼1åˆæœŸåŒ–(interval)
 	timer1_init(1586);
-	irq_init();							// IRQ‰Šú‰»
+	irq_init();							// IRQåˆæœŸåŒ–
 	
 	// CommandPrompt
 	for(;;){

@@ -13,7 +13,7 @@
 #define rs_putc   sci1_tx
 #define rs_printf sci1_printf
 
-// ŠÈˆÕƒtƒH[ƒ}ƒbƒgo—Í
+// ç°¡æ˜“ãƒ•ã‚©ãƒ¼ãƒžãƒƒãƒˆå‡ºåŠ›
 short rs_printf (const char *format, ...)
 {
   short         i = 0;
@@ -35,12 +35,12 @@ short rs_printf (const char *format, ...)
       }
     }
     c = 0;
-    // 0‚Å–„‚ß‚éH
+    // 0ã§åŸ‹ã‚ã‚‹ï¼Ÿ
     if (!(z = (f = *format++) == '0')) format--;
-    // Œ…”Žw’è‚ ‚èH
+    // æ¡æ•°æŒ‡å®šã‚ã‚Šï¼Ÿ
     f = *format++;
     if (f >= '1' && f <= '9') n = f - '0'; else {n = 0; format--;}
-    // 32bitH
+    // 32bitï¼Ÿ
     f = *format++;
     l = (f == 'l');
     if (!l) format--;

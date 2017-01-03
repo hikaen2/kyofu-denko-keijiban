@@ -14,11 +14,11 @@
 #include "command.h"
 #include "sci.h"
 
-// ƒRƒ}ƒ“ƒhƒ‰ƒCƒ““WŠJ
+// ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å±•é–‹
 int commandline_deployment(char* command_line, int* argc, char* argv[]);
 
 ///////////////////////////////////////////////////////////////////////////////
-// ƒRƒ}ƒ“ƒhƒe[ƒuƒ‹‚ğƒ}ƒNƒ‚Å¶¬
+// ã‚³ãƒãƒ³ãƒ‰ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’ãƒã‚¯ãƒ­ã§ç”Ÿæˆ
 typedef struct {
 	char* name;
 	int (*command)( int argc, char* argv[] );
@@ -61,7 +61,7 @@ int commandline_deployment(char* command_line, int* argc, char* argv[])
 	
 	length = strlen( command_line );
 	for( i=0; command_line[i]!='\0'; i++ ){
-		if( command_line[i]=='\b' ){			// ƒoƒbƒNƒXƒy[ƒX“WŠJ
+		if( command_line[i]=='\b' ){			// ãƒãƒƒã‚¯ã‚¹ãƒšãƒ¼ã‚¹å±•é–‹
 			ofs = (i!=0);
 			for(j=i-ofs; j<=length-1-ofs; j++){
 				command_line[j] = command_line[j+1+ofs];
@@ -69,7 +69,7 @@ int commandline_deployment(char* command_line, int* argc, char* argv[])
 			length -= 1+ofs;
 			i -= 1+ofs;
 		}
-		else if( 0x01 <= command_line[i] && command_line[i] <= 0x1f ){	// •Ï‚È‚Ìíœ
+		else if( 0x01 <= command_line[i] && command_line[i] <= 0x1f ){	// å¤‰ãªã®å‰Šé™¤
 			for(j=i; j<=length-1; j++){
 				command_line[j] = command_line[j+1];
 			}
@@ -79,15 +79,15 @@ int commandline_deployment(char* command_line, int* argc, char* argv[])
 	
 	*argc = 0;  i = 0;
 	while( command_line[i]!='\0' ){
-		while( command_line[i]==' ' && command_line[i]!='\0' ){			// ƒXƒy[ƒX–„‚ß
+		while( command_line[i]==' ' && command_line[i]!='\0' ){			// ã‚¹ãƒšãƒ¼ã‚¹åŸ‹ã‚
 			command_line[i] = '\0';
 			i++;
 		}
 		if( command_line[i]!='\0' ){
-			if( *argc < ARGC_MAX ) argv[(*argc)++] = &command_line[i];	// ƒRƒ}ƒ“ƒhƒ‰ƒCƒ““WŠJ
+			if( *argc < ARGC_MAX ) argv[(*argc)++] = &command_line[i];	// ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å±•é–‹
 			i++;
 		}
-		while( command_line[i]!=' ' && command_line[i]!='\0' ){			// •¶š—ñ“Ç‚İ”ò‚Î‚µ
+		while( command_line[i]!=' ' && command_line[i]!='\0' ){			// æ–‡å­—åˆ—èª­ã¿é£›ã°ã—
 			i++;
 		}
 	}

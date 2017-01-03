@@ -11,14 +11,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 /* sci.h */
 
-void           sci1_init(void);												// SCI1‰Šú‰»
-unsigned char  sci1_rx(void);												// SCI1‚©‚ç‚P•¶šóM
-void           sci1_tx(char data);											// SCI1‚É‚P•¶š‘—M
-unsigned char* sci1_strrx(char* str, int maxchar);							// SCI1‚©‚ç•¶š—ñ‚ğóM
-void           sci1_strtx(const char* str);									// SCI1‚É•¶š—ñ‚ğ‘—M
-unsigned int   sci1_sread(void* buf, unsigned int size, unsigned int n);	// SCI1‚©‚çsize*n Byte óM
-unsigned short sci1_sreadword(void);										// SCI1‚©‚ç2ByteóM
-unsigned long  sci1_sreaddword(void);										// SCI1‚©‚ç4ByteóM
+void           sci1_init(void);												// SCI1åˆæœŸåŒ–
+unsigned char  sci1_rx(void);												// SCI1ã‹ã‚‰ï¼‘æ–‡å­—å—ä¿¡
+void           sci1_tx(char data);											// SCI1ã«ï¼‘æ–‡å­—é€ä¿¡
+unsigned char* sci1_strrx(char* str, int maxchar);							// SCI1ã‹ã‚‰æ–‡å­—åˆ—ã‚’å—ä¿¡
+void           sci1_strtx(const char* str);									// SCI1ã«æ–‡å­—åˆ—ã‚’é€ä¿¡
+unsigned int   sci1_sread(void* buf, unsigned int size, unsigned int n);	// SCI1ã‹ã‚‰size*n Byte å—ä¿¡
+unsigned short sci1_sreadword(void);										// SCI1ã‹ã‚‰2Byteå—ä¿¡
+unsigned long  sci1_sreaddword(void);										// SCI1ã‹ã‚‰4Byteå—ä¿¡
 short          sci1_printf(const char *format, ...);
 
 ////////////////////////////////////////////////////////////////////////////////
