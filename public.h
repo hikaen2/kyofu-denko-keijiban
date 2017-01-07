@@ -3,18 +3,18 @@
 
 #ifndef __PUBLIC_H__
 #define __PUBLIC_H__
-	#define  MAX_WIDTH  228
-	#define  MAX_HEIGHT  16
-	#define  CHAR_WIDTH   8
-	#define  CHAR_HEIGHT 16
+    #define  MAX_WIDTH  228
+    #define  MAX_HEIGHT  16
+    #define  CHAR_WIDTH   8
+    #define  CHAR_HEIGHT 16
 #endif
 
 
 
 #ifdef PUBLIC
-	#define PUBEXT
+    #define PUBEXT
 #else
-	#define PUBEXT extern
+    #define PUBEXT extern
 #endif
 
 #include "bmp.h"
