@@ -1199,6 +1199,7 @@ extern short SCI1_PRINTF (const char *, ...) __attribute__ ((format (printf, 1, 
 /*--------------------------------------------------------------*/
 /* インライン命令                                               */
 /*--------------------------------------------------------------*/
+/*
 __inline__ void sleep (void) __attribute__ ((always_inline));
 __inline__ void nop (void) __attribute__ ((always_inline));
 __inline__ void set_ccr (unsigned char mask) __attribute__ ((always_inline));
@@ -1233,6 +1234,7 @@ extern __inline__ void *get_sp (void)
   asm ("mov.l r7,%0":"=g"(sp):);
   return(sp);
 }
+*/
 
 #ifdef __cplusplus
 }

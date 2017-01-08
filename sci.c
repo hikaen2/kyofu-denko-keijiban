@@ -7,9 +7,8 @@
 
 
 #include "3048.h"
-#include "sci.h"
+#include "public.h"
 #include "sci_printf.c"
-#include "timer.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 

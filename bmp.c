@@ -1,103 +1,50 @@
-///////////////////////////////////////////////////////////////////////////////
-/* bmp.c */
-
-#include "bmp.h"
-#include "sci.h"
-#include "public.h"
-#include "bmp_def.h"
-
-static __inline__ void bset(unsigned char* data, unsigned char nbit) __attribute__ ((always_inline));
-static __inline__ void bclr(unsigned char* data, unsigned char nbit) __attribute__ ((always_inline));
-static __inline__ unsigned char btst(const unsigned char* data, unsigned char nbit) __attribute__ ((always_inline));
-static __inline__ char getbit(const unsigned char* data, int nbit);     // dataのnbit目のbitを返す
-static __inline__ void letbit(unsigned char* data, int nbit, char bit); // dataのnbit目にbitを格納
-
-///////////////////////////////////////////////////////////////////////////////
-
-__inline__ void bset(unsigned char* data, unsigned char nbit)
-{
-    asm __volatile__ ("bset %0l,@%1"::"r"(nbit),"r"(data));
-    return;
-}
-__inline__ void bclr(unsigned char* data, unsigned char nbit)
-{
-    asm __volatile__ ("bclr %0l,@%1"::"r"(nbit),"r"(data));
-    return;
-}
-__inline__ unsigned char btst(const unsigned char* data, unsigned char nbit)
-{
-    unsigned char __ccr;
-    asm __volatile__ (
-        "btst   %1l,@%c2:8 \n\t"
-        "stc    ccr,%0l \n\t"
-        "and.b  #4:8,%0l"
-        : "=r"(__ccr) : "r"(nbit), "r"(data) : "r0"
-    );
-    return __ccr;
-}
-
-// dataのnbit目のbitを返す
-__inline__ char getbit(const unsigned char* data, int nbit)
-{
-    return btst(&data[nbit/8], 7-(nbit%8));
-}
-
 /*
-// dataのnbit目のbitを返す
-__inline__ char getbit(const unsigned char* data, int nbit)
-{
-    unsigned char mask = 1;
-    mask = mask << (7-(nbit%8));
-    return (data[nbit/8] & mask)!=0;
-}
-*/
-// dataのnbit目にbitを格納
-__inline__ void letbit(unsigned char* data, int nbit, char bit)
-{
-    if(bit) bset(&data[nbit/8], nbit%8);
-    else    bclr(&data[nbit/8], nbit%8);
-    return;
-}
+ * bmp.c
+ */
+
+#include "public.h"
+#include <stdint.h>
 
 ///////////////////////////////////////////////////////////////////////////////
-// ABMPを初期化する
-void initABMP(ABMP* abmp)
+
+static void bset(unsigned char* data, unsigned char nbit)
 {
-    int i;
-    abmp->data = Public_Abmp_Data;
-    for(i=0;   i<default_size; i++){
-        abmp->data[i] = default_data[i];
-    }
-    abmp->size = default_size;
-    abmp->x    = default_x;
-    abmp->y    = default_y;
-    return;
+    asm("bset %0l,@%1"::"r"(nbit),"r"(data));
 }
 
-// ABMPの座標(x,y)の値を返す 多分未完成
-int getpointABMP(const ABMP* abmp, int x, int y)
+static void bclr(unsigned char* data, unsigned char nbit)
 {
-    if(x < 0 || abmp->x <= x) return 0;
-    if(y < 0 || abmp->y <= y) return 0;
-    return getbit(abmp->data, x*y+y);
+    asm("bclr %0l,@%1"::"r"(nbit),"r"(data));
+}
+
+// bのnbit目のbitを返す
+static uint8_t getbit(uint8_t b, uint8_t n)
+{
+    return (b & (1 << (7 - n))) == 0 ? 0 : 1;
+}
+
+// dataのnbit目にbitを格納
+static void letbit(unsigned char* data, int nbit, char bit)
+{
+    if (bit == 1) {
+        bset(&data[nbit / 8], nbit % 8);
+    } else {
+        bclr(&data[nbit / 8], nbit % 8);
+    }
 }
 
 // ABMPの座標(x,y)にbitを格納する
-void letpointABMP(ABMP* abmp, int x, int y, char bit)
+static void pset(int x, int y, char b)
 {
-    if(x < 0 || abmp->x <= x) return;
-    if(y < 0 || abmp->y <= y) return;
-    letbit(abmp->data, y+x*abmp->y, bit);
-    return;
+    letbit(VRAM, y + x * 16, b);
 }
 
 // ABMPをSCI1から読む
-int readABMP(ABMP* abmp)
+int readABMP(void)
 {
-    long linesize;
-    int x,y,i;
-    unsigned char temp;
-    
+    int abmpx;
+    int abmpy;
+  
     // ヘッダ読み込み
           if( sci1_sreadword()  != 0x4d42 )      return 1;  // bmfh.bfType
               sci1_sreaddword();                            // bmfh.bfSize
@@ -105,8 +52,8 @@ int readABMP(ABMP* abmp)
               sci1_sreadword();                             // bmfh.bfReserved2
               sci1_sreaddword();                            // bmfh.bfOffBits
               sci1_sreaddword();                            // bmih.biSize
-    abmp->x = sci1_sreaddword();                            // bmih.biWidth
-    abmp->y = sci1_sreaddword(); if(abmp->y < 0) return 2;  // bmih.biHeight
+      abmpx = sci1_sreaddword();                            // bmih.biWidth
+      abmpy = sci1_sreaddword(); if(abmpy < 0)   return 2;  // bmih.biHeight
           if( sci1_sreadword()  != 1 )           return 3;  // bmih.biPlanes
           if( sci1_sreadword()  != 1 )           return 4;  // bmih.biBitCount
           if( sci1_sreaddword() != 0 )           return 5;  // bmih.biCompression
@@ -118,41 +65,30 @@ int readABMP(ABMP* abmp)
               sci1_sreaddword();                            // rgbq[0]
               sci1_sreaddword();                            // rgbq[1]
 
-    linesize   = ((abmp->x+31)/32) * 32;
-    abmp->size = abmp->x  * abmp->y / 8;
+    long linesize   = ((abmpx + 31) / 32) * 32;
 
-    for(y=abmp->y-1; y>=0; y-- ){
-    for(x=0;  x<linesize;  x+=8){
-        temp = sci1_rx();
-        for(i=0; i<8; i++) {letpointABMP(abmp, x+i, y, getbit(&temp,i)); }
-    }
+    for (int y = abmpy - 1; y >= 0; y--) {
+        for (int x = 0;  x < linesize; x += 8) {
+            uint8_t byte = sci1_rx();
+            for (int i = 0; i < 8; i++) {
+                pset(x + i, y, getbit(byte, i));
+            }
+        }
     }
     return 0;
 }
 
 // ABMPをダンプする
-void dumpABMP(const ABMP* abmp)
+void dumpABMP(void)
 {
-    int i;
-    sci1_printf("abmp = 0x%08x\n", abmp);
-    sci1_printf("x=%d, y=%d, size=%d, data=0x%08x\n", abmp->x, abmp->y, abmp->size, abmp->data);
+    //sci1_printf("abmp = 0x%08x\n", abmp);
+    //sci1_printf("x=%d, y=%d, size=%d, data=0x%08x\n", abmp->x, abmp->y, abmp->size, Public_vram);
 
     sci1_printf("data[] = {\n");
-    for(i=0; i<abmp->size; i++){
-        sci1_printf("0x%02x,", abmp->data[i]);
+    for (int i = 0; i < MAX_WIDTH * 2 ; i++) {
+        sci1_printf("0x%02x,", VRAM[i]);
     }
     sci1_printf("};\n");
-    return;
-}
-
-// ABMPをLEDに表示する
-void printlineABMP(const ABMP* abmp, unsigned int line, unsigned char* upper, unsigned char* lower)
-{
-    line = line % MAX_WIDTH;
-    if(line >= abmp->x) return;
-    *upper = abmp->data[line*2];
-    *lower = abmp->data[line*2+1];
-    return;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

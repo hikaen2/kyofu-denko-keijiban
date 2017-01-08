@@ -8,8 +8,8 @@ H8/3048マイコン用です。
 - h8crt0.s : スタートアップルーチン
 - main.c
 - public.h : グローバル変数
-- shell.h, shell.c
-- timer.h, timer.c
-- sci.h, sci.c, sci_printf.c : serial communication interface
+- shell.c
+- timer.c
+- sci.c, sci_printf.c : serial communication interface
 - command.h, command_def.h, command.c
-- bmp.h, bmp_def.h, bmp.c
+- bmp.c

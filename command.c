@@ -1,17 +1,15 @@
-///////////////////////////////////////////////////////////////////////////////
-/* command.c */
+/*
+ * command.c
+ */
 
 #include "3048.h"
-#include <stdlib.h>
-#include "command.h"
-#include "sci.h"
-#include "bmp.h"
 #include "public.h"
+#include <stdlib.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 int cmd_dump( int argc, char* argv[] )
 {
-    dumpABMP(&Public_Abmp);
+    dumpABMP();
     sci1_printf("done.\n\n");
     return 0;
 }
@@ -38,7 +36,7 @@ int cmd_read( int argc, char* argv[] )
 {
     int ret;
     sci1_printf("Send bitmap file.\n");
-    ret = readABMP(&Public_Abmp);
+    ret = readABMP();
     if(ret == 0) sci1_printf("done.\n\n");
     else         sci1_printf("error:%d.\n\n", ret);
     return ret;
@@ -61,14 +59,14 @@ int cmd_sync( int argc, char* argv[] )
 
 int cmd_lock( int argc, char* argv[] )
 {
-    FLG_autosync = 0;
+    AUTOSYNC = 0;
     sci1_printf("done.\n"); 
     return 0;
 }
 
 int cmd_unlock( int argc, char* argv[] )
 {
-    FLG_autosync = 1;
+    AUTOSYNC = 1;
     sci1_printf("done.\n");
     return 0;
 }
@@ -88,15 +86,15 @@ int cmd_ver( int argc, char* argv[] )
 
 int cmd_reverse( int argc, char* argv[] )
 {
-    if     (Public_Scroll_Value ==  0) Public_Scroll_Value =  1;
-    else if(Public_Scroll_Value ==  1) Public_Scroll_Value = -1;
-    else if(Public_Scroll_Value == -1) Public_Scroll_Value =  1;
+    if     (DELTA ==  0) DELTA =  1;
+    else if(DELTA ==  1) DELTA = -1;
+    else if(DELTA == -1) DELTA =  1;
     return 0;
 }
 
 int cmd_stop( int argc, char* argv[] )
 {
-    Public_Scroll_Value = 0;
+    DELTA = 0;
     return 0;
 }
 

@@ -8,14 +8,18 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "3048.h"
+#include "public.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "command.h"
-#include "sci.h"
 
 // コマンドライン展開
-int commandline_deployment(char* command_line, int* argc, char* argv[]);
+static int commandline_deployment(char* command_line, int* argc, char* argv[]);
+
+// プロトタイプ宣言をマクロで生成
+#define CMD(a)  int cmd_ ## a( int argc, char* argv[] );
+#include "command_def.h"
+#undef CMD
 
 ///////////////////////////////////////////////////////////////////////////////
 // コマンドテーブルをマクロで生成
